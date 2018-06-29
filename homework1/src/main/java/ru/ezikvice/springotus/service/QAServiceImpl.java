@@ -22,29 +22,31 @@ public class QAServiceImpl implements QAService {
     public List<Question> loadQuestions(String fileName) {
 
         List<Question> questions = new ArrayList<>();
+        Set<Answer> answers = new HashSet<>();
 
+        List<String[]> lines = new ArrayList<>();
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            FileReader f = new FileReader(classLoader.getResource("questions.csv").getFile());
+            FileReader f = new FileReader(classLoader.getResource(fileName).getFile());
             CSVReader reader = new CSVReader(f, ';');
             try {
-                List<String[]> lines = reader.readAll();
+                lines = reader.readAll();
 
-                Set<Answer> answers = new HashSet<>();
-                Question question = new Question();
                 for (String[] line : lines) {
 
                     if (line[ANSWER_ID] == null) {
-                        if(question != null) {
-
-                        }
+                        answers.add(new Answer(Integer.getInteger(line[QUESTION_ID].toString()),
+                                Integer.getInteger(line[ANSWER_ID].toString()),
+                                line[TEXT].toString(),
+                                line[CORRECT].equals("1") ? true : false));
                     } else {
-                        question = new Question(Integer.getInteger(line[QUESTION_ID]),
-                                line[TEXT],
-                                new HashSet<Answer>());
+                        String idd = line[QUESTION_ID];
+                        int id = Integer.getInteger(idd);
+                        questions.add(new Question(id, line[TEXT]));
                     }
-
                 }
+
+                System.out.println("ok");
 
             } catch (IOException e) {
                 e.printStackTrace();

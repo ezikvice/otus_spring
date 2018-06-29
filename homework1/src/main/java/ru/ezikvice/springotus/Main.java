@@ -1,19 +1,15 @@
 package ru.ezikvice.springotus;
 
-import au.com.bytecode.opencsv.CSVReader;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
+import ru.ezikvice.springotus.service.QAService;
 
 public class Main {
 
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
-
+        QAService service = context.getBean(QAService.class);
+        service.loadQuestions("questions.csv");
+        System.out.println("main end");
 
     }
 }

@@ -7,9 +7,13 @@ public class Question {
     public Question() {
     }
 
-    public Question(int id, String text, Set<Answer> answers) {
+    public Question(int id, String text) {
         this.id = id;
         this.text = text;
+    }
+
+    public Question(int id, String text, Set<Answer> answers) {
+        this(id, text);
         this.answers = answers;
     }
 
