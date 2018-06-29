@@ -6,6 +6,16 @@ public class Answer {
     private String text;
     private boolean correct;
 
+    public Answer() {
+    }
+
+    public Answer(int id, int questionId, String text, boolean correct) {
+        this.id = id;
+        this.questionId = questionId;
+        this.text = text;
+        this.correct = correct;
+    }
+
     public int getId() {
         return id;
     }

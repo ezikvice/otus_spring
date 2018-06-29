@@ -3,6 +3,16 @@ package ru.ezikvice.springotus.domain;
 import java.util.Set;
 
 public class Question {
+
+    public Question() {
+    }
+
+    public Question(int id, String text, Set<Answer> answers) {
+        this.id = id;
+        this.text = text;
+        this.answers = answers;
+    }
+
     private int id;
     private String text;
     private Set<Answer> answers;
