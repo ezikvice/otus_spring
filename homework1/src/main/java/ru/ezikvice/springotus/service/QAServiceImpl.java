@@ -34,15 +34,16 @@ public class QAServiceImpl implements QAService {
 
                 for (String[] line : lines) {
 
-                    if (line[ANSWER_ID] == null) {
-                        answers.add(new Answer(Integer.getInteger(line[QUESTION_ID].toString()),
-                                Integer.getInteger(line[ANSWER_ID].toString()),
-                                line[TEXT].toString(),
-                                line[CORRECT].equals("1") ? true : false));
+                    if (line[ANSWER_ID] == null || line[ANSWER_ID].equals("")) {
+                        Answer a = new Answer(Integer.getInteger(new String(line[QUESTION_ID])),
+                                Integer.getInteger(new String(line[ANSWER_ID])),
+                                new String(line[TEXT]),
+                                line[CORRECT].equals("1") ? true : false);
+                        answers.add(a);
                     } else {
-                        String idd = line[QUESTION_ID];
-                        int id = Integer.getInteger(idd);
-                        questions.add(new Question(id, line[TEXT]));
+                        String idd = new String(line[QUESTION_ID]);
+                        Integer id = Integer.parseInt(idd);
+                        questions.add(new Question(id, new String(line[TEXT])));
                     }
                 }
 
