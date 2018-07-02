@@ -1,5 +1,6 @@
 package ru.ezikvice.springotus.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Question {
@@ -43,5 +44,12 @@ public class Question {
 
     public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
+    }
+
+    public void setAnswer(Answer answer) {
+        if (this.answers == null) {
+            this.answers = new HashSet<>();
+        }
+        this.answers.add(answer);
     }
 }

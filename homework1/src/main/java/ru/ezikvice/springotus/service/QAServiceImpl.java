@@ -7,10 +7,9 @@ import ru.ezikvice.springotus.domain.Question;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class QAServiceImpl implements QAService {
     private static final int QUESTION_ID = 0;
@@ -19,12 +18,10 @@ public class QAServiceImpl implements QAService {
     private static final int CORRECT = 3;
 
     @Override
-    public List<Question> loadQuestions(String fileName) {
+    public Map<Integer, Question> loadQuestions(String fileName) {
+        Map<Integer, Question> questions = new HashMap<>();
 
-        List<Question> questions = new ArrayList<>();
-        Set<Answer> answers = new HashSet<>();
-
-        List<String[]> lines = new ArrayList<>();
+        List<String[]> lines;
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             FileReader f = new FileReader(classLoader.getResource(fileName).getFile());
@@ -33,17 +30,19 @@ public class QAServiceImpl implements QAService {
                 lines = reader.readAll();
 
                 for (String[] line : lines) {
+                    String qIdStr = new String(line[QUESTION_ID]);
+                    Integer questionId = Integer.parseInt(qIdStr);
+
+                    String txt = new String(line[TEXT]);
+
+                    Boolean correct = line[CORRECT].equals("1");
 
                     if (line[ANSWER_ID] == null || line[ANSWER_ID].equals("")) {
-                        Answer a = new Answer(Integer.getInteger(new String(line[QUESTION_ID])),
-                                Integer.getInteger(new String(line[ANSWER_ID])),
-                                new String(line[TEXT]),
-                                line[CORRECT].equals("1") ? true : false);
-                        answers.add(a);
+                        questions.put(questionId, new Question(questionId, txt));
                     } else {
-                        String idd = new String(line[QUESTION_ID]);
-                        Integer id = Integer.parseInt(idd);
-                        questions.add(new Question(id, new String(line[TEXT])));
+                        String aIdStr = new String(line[ANSWER_ID]);
+                        Integer answerId = Integer.parseInt(aIdStr);
+                        questions.get(questionId).setAnswer(new Answer(questionId, answerId, txt, correct));
                     }
                 }
 
@@ -58,6 +57,6 @@ public class QAServiceImpl implements QAService {
             e.printStackTrace();
         }
 
-        return null;
+        return questions;
     }
 }

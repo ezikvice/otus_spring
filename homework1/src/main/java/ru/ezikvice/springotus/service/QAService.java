@@ -2,8 +2,8 @@ package ru.ezikvice.springotus.service;
 
 import ru.ezikvice.springotus.domain.Question;
 
-import java.util.List;
+import java.util.Map;
 
 public interface QAService {
-    List<Question> loadQuestions(String fileName);
+    Map<Integer, Question> loadQuestions(String fileName);
 }
