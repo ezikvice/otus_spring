@@ -1,6 +1,7 @@
 package ru.ezikvice.springotus.service;
 
 import au.com.bytecode.opencsv.CSVReader;
+import org.springframework.stereotype.Service;
 import ru.ezikvice.springotus.domain.Answer;
 import ru.ezikvice.springotus.domain.Question;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class QAServiceImpl implements QAService {
     private static final int QUESTION_ID = 0;
     private static final int ANSWER_ID = 1;
@@ -29,6 +31,7 @@ public class QAServiceImpl implements QAService {
             try {
                 lines = reader.readAll();
 
+                // TODO: to see how to make it simpler
                 for (String[] line : lines) {
                     String qIdStr = new String(line[QUESTION_ID]);
                     Integer questionId = Integer.parseInt(qIdStr);
@@ -42,11 +45,9 @@ public class QAServiceImpl implements QAService {
                     } else {
                         String aIdStr = new String(line[ANSWER_ID]);
                         Integer answerId = Integer.parseInt(aIdStr);
-                        questions.get(questionId).setAnswer(new Answer(questionId, answerId, txt, correct));
+                        questions.get(questionId).setAnswer(new Answer(answerId, questionId, txt, correct));
                     }
                 }
-
-                System.out.println("ok");
 
             } catch (IOException e) {
                 e.printStackTrace();
