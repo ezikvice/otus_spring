@@ -39,7 +39,7 @@ public class Main {
         System.out.println("----");
         System.out.printf("Отлично, %s ! А вот и Ваши результаты:%n", userName);
         for (ExaminationQuestion userAnswer : userAnswers) {
-            System.out.printf("Вопрос %d: %s%n", userAnswer.getQuestionId(), userAnswer.isCorrect() ? "V" : "X");
+            System.out.printf("Вопрос %d: %s%n", userAnswer.getQuestionId(), userAnswer.isCorrect() ? "Верно" : "Неверно");
         }
 
     }
