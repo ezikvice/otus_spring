@@ -32,13 +32,7 @@ public class Main {
 
         List<ExaminationQuestion> userAnswers = new ArrayList<>();
         for (Question question : questionMap.values()) {
-            System.out.printf("%d. %s%n", question.getId(), question.getText());
-            for (Answer answer : question.getAnswers().values()) {
-                System.out.printf("%d. %s %n", answer.getId(), answer.getText());
-            }
-            System.out.println("Ваш ответ:");
-            Integer userAnswerId = Integer.parseInt(scanner.next());
-            Answer userAnswer = question.getAnswerById(userAnswerId);
+            Answer userAnswer = service.askQuestion(question);
             userAnswers.add(new ExaminationQuestion(question.getId(), userAnswer.getId(), userAnswer.isCorrect()));
         }
 

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 @Service
 public class QAServiceImpl implements QAService {
@@ -18,6 +19,8 @@ public class QAServiceImpl implements QAService {
     private static final int ANSWER_ID = 1;
     private static final int TEXT = 2;
     private static final int CORRECT = 3;
+
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public Map<Integer, Question> loadQuestions(String fileName) {
@@ -59,5 +62,28 @@ public class QAServiceImpl implements QAService {
         }
 
         return questions;
+    }
+
+    @Override
+    public Answer askQuestion(Question question) {
+        System.out.printf("%d. %s%n", question.getId(), question.getText());
+        for (Answer answer : question.getAnswers().values()) {
+            System.out.printf("%d. %s %n", answer.getId(), answer.getText());
+        }
+        System.out.println("Ваш ответ:");
+        Integer userAnswerId = null;
+        Answer userAnswer;
+        try {
+            userAnswerId = Integer.parseInt(scanner.next());
+            userAnswer = question.getAnswerById(userAnswerId);
+            if (userAnswer == null) {
+                System.out.println("Ответ с таким номером не найден. Попробуйте ввести номер ответа ещё раз");
+                userAnswer = askQuestion(question);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Вы ввели не числовое значение. Пожалуйста, введите число");
+            userAnswer = askQuestion(question);
+        }
+        return userAnswer;
     }
 }
