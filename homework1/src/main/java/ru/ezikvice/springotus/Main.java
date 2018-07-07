@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("TEST!");
-        Locale rus = new Locale("ru", "RU");
+        Locale rus = new Locale("en", "EN");
         ResourceBundle rb = ResourceBundle.getBundle("l10n", rus);
 
         ConfigDao configDao = new ConfigDao();
@@ -34,7 +34,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Здравствуйте! Представьтесь, пожалуйста:");
+        System.out.printf("%s", rb.getString("greetings"));
         String userName = scanner.next();
 
         System.out.printf("%s, предлагаем Вам пройти тест.%n", userName);
@@ -48,9 +48,10 @@ public class Main {
         System.out.println("----");
         System.out.printf("Отлично, %s ! А вот и Ваши результаты:%n", userName);
         for (ExaminationQuestion userAnswer : userAnswers) {
-            System.out.printf("Вопрос %d: %s%n", userAnswer.getQuestionId(), userAnswer.isCorrect() ?
-                    rb.getString("answer.right") :
-                    rb.getString("answer.wrong"));
+            System.out.printf("%s %d: %s%n",
+                    rb.getString("question"),
+                    userAnswer.getQuestionId(),
+                    userAnswer.isCorrect() ? rb.getString("answer.right") : rb.getString("answer.wrong"));
         }
 
     }
