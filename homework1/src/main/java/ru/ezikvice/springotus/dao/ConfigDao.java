@@ -1,7 +1,9 @@
 package ru.ezikvice.springotus.dao;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import java.util.Locale;
@@ -13,17 +15,10 @@ public class ConfigDao {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
-//    @Bean
-//    public MessageSource messageSource() {
-//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//        messageSource.setBasenames("/l10n");
-//        messageSource.setDefaultEncoding("UTF-8");
-//        return messageSource;
-//    }
 
     @Bean
     ResourceBundle resourceBundle() {
-        Locale loc = new Locale("en", "EN");
+        Locale loc = new Locale("ru", "RU");
         return ResourceBundle.getBundle("l10n", loc);
     }
 }
