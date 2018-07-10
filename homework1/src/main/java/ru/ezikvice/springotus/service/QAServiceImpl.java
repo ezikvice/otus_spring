@@ -1,6 +1,5 @@
 package ru.ezikvice.springotus.service;
 
-import au.com.bytecode.opencsv.CSVReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ezikvice.springotus.domain.Answer;
@@ -8,63 +7,18 @@ import ru.ezikvice.springotus.domain.ExaminationQuestion;
 import ru.ezikvice.springotus.domain.Question;
 import ru.ezikvice.springotus.domain.UserExamination;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 @Service
 public class QAServiceImpl implements QAService {
-    private static final int QUESTION_ID = 0;
-    private static final int ANSWER_ID = 1;
-    private static final int TEXT = 2;
-    private static final int CORRECT = 3;
 
     private final Scanner scanner = new Scanner(System.in);
 
+    private final ResourceBundle rb;
+
     @Autowired
-    ResourceBundle rb;
-
-    @Override
-    public Map<Integer, Question> loadQuestions() {
-        Map<Integer, Question> questions = new HashMap<>();
-
-        List<String[]> lines;
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            FileReader f = new FileReader(classLoader.getResource(rb.getString("path.to.file.questions")).getFile());
-            CSVReader reader = new CSVReader(f, ';');
-            try {
-                lines = reader.readAll();
-
-                // TODO: to see how to make it simpler
-                for (String[] line : lines) {
-                    String qIdStr = new String(line[QUESTION_ID]);
-                    Integer questionId = Integer.parseInt(qIdStr);
-
-                    String txt = new String(line[TEXT]);
-
-                    Boolean correct = line[CORRECT].equals("1");
-
-                    if (line[ANSWER_ID] == null || line[ANSWER_ID].equals("")) {
-                        questions.put(questionId, new Question(questionId, txt));
-                    } else {
-                        String aIdStr = new String(line[ANSWER_ID]);
-                        Integer answerId = Integer.parseInt(aIdStr);
-                        questions.get(questionId).setAnswer(new Answer(answerId, questionId, txt, correct));
-                    }
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println(reader);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return questions;
+    public QAServiceImpl(ResourceBundle rb) {
+        this.rb = rb;
     }
 
     @Override
@@ -74,7 +28,7 @@ public class QAServiceImpl implements QAService {
             System.out.printf("%d. %s %n", answer.getId(), answer.getText());
         }
         System.out.printf("%s", rb.getString("student.answer"));
-        Integer userAnswerId = null;
+        Integer userAnswerId;
         Answer userAnswer;
         try {
             userAnswerId = Integer.parseInt(scanner.next());
@@ -109,7 +63,7 @@ public class QAServiceImpl implements QAService {
     @Override
     public void printResult(UserExamination exam) {
         System.out.println("----");
-        System.out.printf("Отлично, %s ! А вот и Ваши результаты:%n", exam.getUserName());
+        System.out.printf(rb.getString("test.results"), exam.getUserName());
         for (ExaminationQuestion userAnswer : exam.getUserQuestions()) {
             System.out.printf("%s %d: %s%n",
                     rb.getString("question"),

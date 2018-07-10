@@ -7,8 +7,6 @@ import ru.ezikvice.springotus.domain.UserExamination;
 import java.util.Map;
 
 public interface QAService {
-    Map<Integer, Question> loadQuestions();
-
     Answer askQuestion(Question question);
 
     UserExamination examine(Map<Integer, Question> questionMap);
